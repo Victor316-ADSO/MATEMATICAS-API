@@ -1,0 +1,14 @@
+<IfModule mod_headers.c>
+    # Dev: mismo valor que envió el navegador en Origin, solo si es localhost o 127.0.0.1 (cualquier puerto).
+    SetEnvIf Origin "(^https?://(localhost|127\.0\.0\.1)(:[0-9]+)?$)" CORSTrusted=$1
+    Header set Access-Control-Allow-Origin %{CORSTrusted}e env=CORSTrusted
+    Header merge Vary Origin env=CORSTrusted
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, PATCH, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept, Origin"
+    Header always set Access-Control-Allow-Credentials "true"
+</IfModule>
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
