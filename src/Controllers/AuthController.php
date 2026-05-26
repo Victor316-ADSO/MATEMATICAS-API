@@ -42,15 +42,15 @@ class AuthController extends BaseController
                 return $this->errorResponse($response, 'Datos JSON inválidos', 400);
             }
 
-            $programa = $data['programa'] ?? null;
-            $identificacion = $data['identificacion'] ?? null;
+            $programa = trim((string) ($data['programa'] ?? $data['codi_prog'] ?? ''));
+            $identificacion = trim((string) ($data['identificacion'] ?? $data['iden_pers'] ?? ''));
 
-            if (!$programa || !$identificacion) {
+            if ($programa === '' || $identificacion === '') {
                 return $this->errorResponse($response, 'Programa e identificación son requeridos', 400);
             }
 
             $db = $this->getDatabase();
-            $stmt = $db->prepare("SELECT * FROM egresados WHERE codi_prog = ? AND iden_pers = ?");
+            $stmt = $db->prepare('SELECT * FROM egresados WHERE codi_prog = ? AND iden_pers = ?');
             $stmt->execute([$programa, $identificacion]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -74,7 +74,11 @@ class AuthController extends BaseController
                 ]);
             }
 
-            return $this->errorResponse($response, 'Usuario no encontrado', 401);
+            return $this->errorResponse(
+                $response,
+                'Usuario no encontrado. Verifica programa e identificación, o regístrate en la plataforma.',
+                401
+            );
             
         } catch (Exception $e) {
             error_log("Error en login: " . $e->getMessage());

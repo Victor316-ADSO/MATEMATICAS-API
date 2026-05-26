@@ -153,6 +153,37 @@ class BaseController
     }
 
     /**
+     * Verifica JWT emitido solo para administradores del panel Analytics.
+     */
+    protected function verifyAdminJwtToken(string $token): ?object
+    {
+        $decoded = $this->verifyJwtToken($token);
+        if (!$decoded) {
+            return null;
+        }
+        $data = $decoded->data ?? null;
+        $tipo = is_object($data) ? ($data->tipo ?? null) : ($data['tipo'] ?? null);
+        if ($tipo !== 'admin') {
+            return null;
+        }
+        return $decoded;
+    }
+
+    protected function getAdminFromToken(?object $decoded): ?array
+    {
+        if (!$decoded || !isset($decoded->data)) {
+            return null;
+        }
+        $d = (array) $decoded->data;
+        return [
+            'id' => $d['id'] ?? null,
+            'email' => $d['email'] ?? null,
+            'nombre' => $d['nombre'] ?? 'Administrador',
+            'tipo' => 'admin',
+        ];
+    }
+
+    /**
      * Obtiene la base de datos desde el contenedor
      * 
      * @return PDO

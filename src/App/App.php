@@ -28,7 +28,8 @@ $app->get('/', function (Request $request, Response $response) {
             '/api/preguntas',
             '/api/cuestionario',
             '/api/usuario',
-            '/api/respuestas'
+            '/api/respuestas',
+            '/api/quiz-adopcion'
         ]
     ];
 

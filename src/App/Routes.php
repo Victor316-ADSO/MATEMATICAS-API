@@ -32,6 +32,15 @@ $app->group('/api', function(RouteCollectorProxy $group){
     
     //===========================[Rutas de Respuestas]=========================
     require __DIR__ . '/Routes/Respuestas.php';
+
+    //===========================[Auth Administradores Analytics]=========================
+    require __DIR__ . '/Routes/AdminAuth.php';
+
+    //===========================[Analytics Matemático]=========================
+    require __DIR__ . '/Routes/Analytics.php';
+
+    //===========================[Quiz Adopción U(t)]=========================
+    require __DIR__ . '/Routes/QuizAdopcion.php';
 });
 
 
